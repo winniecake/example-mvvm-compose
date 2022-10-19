@@ -1,4 +1,4 @@
-## Tech
+## Tech/Tools
 
 * [Kotlin](https://kotlinlang.org/) 100% coverage
 * [Jetpack](https://developer.android.com/jetpack)
