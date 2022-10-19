@@ -11,3 +11,7 @@
 * Implementation of [Multi Floating Action Button.kt](https://github.com/winniecake/example-mvvm-compose/blob/master/app/src/main/java/com/capital/composesample/ui/view/MultiFloatingActionButton.kt)
 
 <img src="readme/demo_side_menu.gif" width="256" height="540" hspace="10" vspace="10">  <img src="readme/demo_contacts_messages_list.gif" width="256" height="540" hspace="10" vspace="10">  <img src="readme/demo_todo_list.gif" width="256" height="540" hspace="10" vspace="10">
+
+## Architecture
+
+![image](https://github.com/winniecake/example-mvvm-compose/blob/master/readme/structure.png)
