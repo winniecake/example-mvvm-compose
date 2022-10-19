@@ -1,6 +1,7 @@
 package com.capital.composesample.model
 
 import android.util.Log
+import com.capital.composesample.model.data.ToDoInfo
 import com.capital.composesample.model.response.*
 import com.squareup.moshi.Moshi
 import kotlinx.coroutines.delay
@@ -120,5 +121,17 @@ class MainRepository @Inject constructor() {
             e.printStackTrace()
         }
         return messageDatas
+    }
+
+    suspend fun getUserToDoListAPI(id: String, token: String): List<ToDoInfo>{
+        Log.i("MainRepository","getUserToDoListAPI...")
+        delay(2000L)
+        val list: ArrayList<ToDoInfo> = arrayListOf()
+        list.add(ToDoInfo("0", "Design Gaming AD","deadline 10/21", false))
+        list.add(ToDoInfo("1", "Clean Living Room","", false))
+        list.add(ToDoInfo("2", "Monthly Report","to Nick", false))
+        list.add(ToDoInfo("3", "Daily Report","to Amy", false))
+        list.add(ToDoInfo("4", "Lunch","11:30", false))
+        return list
     }
 }
