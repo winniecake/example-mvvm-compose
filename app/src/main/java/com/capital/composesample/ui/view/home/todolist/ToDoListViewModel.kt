@@ -4,11 +4,21 @@ import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.capital.composesample.model.MainRepository
 import com.capital.composesample.model.data.ToDoInfo
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ToDoListViewModel: ViewModel() {
+@HiltViewModel
+class ToDoListViewModel@Inject constructor(
+    stateHandle: SavedStateHandle,
+    private val repository: MainRepository
+): ViewModel() {
 
     var state by mutableStateOf(
         ToDoListContract.State(
@@ -22,13 +32,19 @@ class ToDoListViewModel: ViewModel() {
     var effects = Channel<ToDoListContract.Effect> { Channel.UNLIMITED }
 
     init {
-        val list: ArrayList<ToDoInfo> = arrayListOf()
-        list.add(ToDoInfo("0", "Design Gaming AD","deadline 10/21", false))
-        list.add(ToDoInfo("1", "Clean Living Room","", false))
-        list.add(ToDoInfo("2", "Monthly Report","to Nick", false))
-        list.add(ToDoInfo("3", "Daily Report","to Amy", false))
-        list.add(ToDoInfo("4", "Lunch","11:30", false))
-        state = state.copy(editMode = ToDoListEditMode.Normal, todoInfo = list, isLoading = false)
+        val id = stateHandle.get<String>("USER_ID")
+        val token = stateHandle.get<String>("USER_TOKEN")
+        if (id != null && token != null) {
+            requestToDoListAPIAPI(id, token)
+        }
+    }
+
+    private fun requestToDoListAPIAPI(id: String, token: String) {
+        viewModelScope.launch {
+            state = state.copy(editMode = ToDoListEditMode.Normal, todoInfo = listOf(), isLoading = true, isShowNewDialog = false)
+            val todoList = repository.getUserToDoListAPI(id, token)
+            state = state.copy(editMode = ToDoListEditMode.Normal, todoInfo = todoList, isLoading = false, isShowNewDialog = false)
+        }
     }
 
     fun setEditMode(mode: ToDoListEditMode) {
